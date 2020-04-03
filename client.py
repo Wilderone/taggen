@@ -1,3 +1,5 @@
+# Dont forget about _ in class_ and id_ attribute,
+
 from tags import *
 
 with HTML(output='D:\\index.html') as doc:
