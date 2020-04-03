@@ -25,7 +25,7 @@ class HTML:
 
 
 class TopLevelTag:
-    """Create TopLevelTag, only can be pair-tag, may have STRING of classes in argument, STRING of ID.
+    """Create TopLevelTag, should be a pair-tag, may have STRING of classes in argument, STRING of ID.
     name by default is div
     syntax is TopLevelTag(name='div', class_='class1 class2', id_='id', text='text')
     dont forget _ after class and id"""
@@ -33,8 +33,7 @@ class TopLevelTag:
     def __init__(self, **kwargs):
         self.child = []  # list of childs for += operations
         self.attr = kwargs
-
-        self.name = ''
+        self.name = 'div'
         self.class_ = ''
         self.id_ = ''
         self.text = ''
@@ -47,12 +46,8 @@ class TopLevelTag:
                 self.id_ = f' id="{value}"'
             if 'text' in key:
                 self.text = value
-
-
         self.tag_close = f'</{self.name}>'
         self.tag_result = f"\n<{self.name}{self.class_}{self.id_}>\n{self.text} \n{self.tag_close}"
-
-
 
 # function for returning tag with or without child, used in __str__ and __exit__
     def check_for_child(self):
@@ -78,19 +73,10 @@ class TopLevelTag:
         self.child.append(str(other))
         return self
 
-    # trying
-
-    # def attrib(self):
-    #     attribute_string = ''
-    #     for key, value in self.attr.items():
-    #         attribute_string.join(f'{key}="{value}"')
-    #     return attribute_string
-
-
 class Tag(TopLevelTag):
 
     """Low-level tag, same as TopLevelTag, but may have:
-     is_single=True/False (True by default) - if you need tag without close-pair (img, br)
+     is_single=True/False (False by default) - if you need tag without close-pair (img, br)
      src='text'(empty by default) - for img, script, etc
      Syntax is Tag(name='img', is_single=True, src = './img/1.png', class_='class', id_='id', text='text')
      You can skip any of arguments
@@ -98,7 +84,6 @@ class Tag(TopLevelTag):
 
     def __init__(self, is_single=False, src='', **kwargs):
         super().__init__(**kwargs)
-
         for arg, value in kwargs.items():
             if 'text' in arg:
                 self.text = f'{value}'
@@ -114,15 +99,10 @@ class Tag(TopLevelTag):
         else:
             self.src = src
 
-
-
     def __str__(self):
         self.tag_result = f"\n<{self.name}{self.src}{self.class_}{self.id_}> {self.text} {self.tag_close}"
         return self.check_for_child()
 
-    # def __exit__(self, exc_type, exc_val, exc_tb):
-    #    # self.tag_result = f"\n<{self.name} {self.src} {self.class_} {self.id_}> {self.text} {self.tag_close}"
-    #     return self.tag_result
 
 
 
